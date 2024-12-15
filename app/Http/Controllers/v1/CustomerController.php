@@ -12,8 +12,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::withTrashed()->get();
-         return response()->json($customers);
+         return Customer::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     public function show($id)

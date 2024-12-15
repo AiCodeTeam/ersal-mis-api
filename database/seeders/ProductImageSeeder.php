@@ -14,14 +14,13 @@ class ProductImageSeeder extends Seeder
      */
     public function run(): void
     {
-
         // Loop through 9 images
         for ($i = 1; $i <= 9; $i++) {
             $imageName = $i . '.webp'; // Image name in format 1.webp, 2.webp, ..., 9.webp
             $imagePath = 'product-images/' . $imageName; // Assuming images are stored in the 'product-images' folder
 
-            // Check if the image file exists
-            if (Storage::exists($imagePath)) {
+            // Check if the image file exists on the 'public' disk
+            if (Storage::disk('public')->exists($imagePath)) {
                 // Get the base URL for storing the image
                 $baseUrl = config('app.url');
 

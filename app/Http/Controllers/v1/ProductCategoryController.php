@@ -13,7 +13,8 @@ class ProductCategoryController extends Controller
 
     public function index()
     {
-        return response()->json(Category::all(), 200);
+        return Category::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+
     }
 
 

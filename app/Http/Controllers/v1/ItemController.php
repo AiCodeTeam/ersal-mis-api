@@ -12,14 +12,7 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $items = Item::all();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Items retrieved successfully',
-            'status' => 200,
-            'data' => $items,
-        ], 200);
+        return Item::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
     public function show(Item $item)
     {

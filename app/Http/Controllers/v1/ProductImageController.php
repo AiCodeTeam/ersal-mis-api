@@ -15,15 +15,8 @@ class ProductImageController extends Controller
     use FileHandling;
 
     public function index()
-    {
-        $productImages = ProductImage::all();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Product images retrieved successfully',
-            'status' => 200,
-            'data' => $productImages,
-        ], 200);
+    { 
+        return ProductImage::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     /**

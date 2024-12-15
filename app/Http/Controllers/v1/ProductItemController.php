@@ -13,14 +13,7 @@ class ProductItemController extends Controller
 
     public function index()
     {
-        $productItems = ProductItem::all();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Product items retrieved successfully',
-            'status' => 200,
-            'data' => $productItems,
-        ], 200);
+        return ProductItem::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     /**

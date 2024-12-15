@@ -7,36 +7,52 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\FileHandling;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the products.
-     */
+  use FileHandling;
     public function index()
     {
-        $products = Product::with('images')->get();
-        return response()->json([
-            'success' => true,
-            'message' => 'Products retrieved successfully',
-            'data' => $products,
-        ], 200);
+        return Product::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     /**
      * Store a newly created product in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
-        $product = Product::create($request->all());
-
+        // Create the product
+        $product = Product::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'quantity' => $request->input('quantity'),
+            'product_category_id' => $request->input('product_category_id'),
+        ]);
+    
+        // Handle image uploads using the uploadFiles method
+        if ($request->hasFile('images')) {
+            $uploadedPaths = $this->uploadFiles($request->file('images'), 'product-images');
+    
+            // Save each uploaded path to the database
+            foreach ($uploadedPaths as $path) {
+                $product->images()->create([
+                    'image_url' => $path,
+                ]);
+            }
+        }
+    
+        // Return success response
         return response()->json([
             'success' => true,
-            'message' => 'Product is stored successfully',
+            'message' => 'Product created successfully with images and category',
             'status' => 201,
-            'data' => $product,
+            'data' => $product->load('images', 'category'),
         ], 201);
     }
+    
 
     /**
      * Display the specified product.

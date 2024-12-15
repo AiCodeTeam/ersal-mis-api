@@ -12,14 +12,7 @@ class ExpenseCategoryController extends Controller
 {
     public function index()
     {
-        $categories = ExpenseCategory::all();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Expense categories retrieved successfully',
-            'status' => 200,
-            'data' => $categories,
-        ], 200);
+        return ExpenseCategory::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     public function store(StoreExpenseCategoryRequest $request)

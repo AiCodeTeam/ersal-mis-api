@@ -24,9 +24,7 @@ class Product extends Model
         return $this->belongsToMany(Item::class, 'item_product');
     }
     
-    protected $fillable = [
-        'name', 'price', 'product_category_id', 'quantity', 'description'
-    ];
+    protected $guarded = [];
 
 }
 

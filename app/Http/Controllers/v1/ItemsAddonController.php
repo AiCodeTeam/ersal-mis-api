@@ -14,14 +14,7 @@ class ItemsAddonController extends Controller
      */
     public function index()
     {
-        $itemsAddons = ItemsAddon::all();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Items addons retrieved successfully',
-            'status' => 200,
-            'data' => $itemsAddons,
-        ], 200);
+        return ItemsAddon::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     public function store(StoreItemsAddonRequest $request)

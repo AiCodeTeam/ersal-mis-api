@@ -12,14 +12,8 @@ class ExpenseController extends Controller
 {
     public function index()
     {
-        $expenses = Expense::all();
+        return Expense::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Expenses retrieved successfully',
-            'status' => 200,
-            'data' => $expenses,
-        ], 200);
     }
 
     public function store(StoreExpenseRequest $request)
