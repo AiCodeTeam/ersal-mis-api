@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ProductCategoryController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         return Category::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 

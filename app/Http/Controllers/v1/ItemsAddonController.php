@@ -12,7 +12,7 @@ class ItemsAddonController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return ItemsAddon::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
