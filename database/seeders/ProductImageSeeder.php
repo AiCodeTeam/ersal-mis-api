@@ -27,7 +27,7 @@ class ProductImageSeeder extends Seeder
                 // Create ProductImage record
                 ProductImage::create([
                     'product_id' => $i,  // Example: Assigning product_id same as the loop index
-                    'image_url' => $baseUrl . '/storage/' . $imagePath, // Full URL to image
+                    'image_url' => $baseUrl . 'storage/' . $imagePath, // Full URL to image
                     'description' => 'Image ' . $i, // Example description
                 ]);
             }
