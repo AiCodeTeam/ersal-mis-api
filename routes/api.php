@@ -60,11 +60,11 @@ Route::prefix('v1')->group(function () {
     
     // Items routes with permissions
     Route::apiResource('items', ItemController::class)->middleware([
-        'index' => 'permission:view',
-        'show' => 'permission:view',
-        'store' => 'permission:create',
-        'update' => 'permission:update',
-        'destroy' => 'permission:delete',
+        // 'index' => 'permission:view',
+        // 'show' => 'permission:view',
+        // 'store' => 'permission:create',
+        // 'update' => 'permission:update',
+        // 'destroy' => 'permission:delete',
     ]);
     
     // Product Items routes with permissions

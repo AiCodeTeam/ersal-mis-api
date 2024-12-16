@@ -6,14 +6,33 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Models\Item;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        return Item::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        $items = Item::with(['itemAddons', 'products'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+    
+        // Map the custom attribute into the paginated items
+        $items->getCollection()->transform(function ($item) {
+            $totalAddonQuantity = $item->itemAddons()->sum('quantity');
+            $totalProductCount = $item->products()->count();
+            // Add the custom calculated attribute
+            $item->item_left = $totalAddonQuantity - $totalProductCount;
+    
+            return $item;
+        });
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Items retrieved successfully',
+            'status' => 200,
+            'data' => $items,
+        ], 200);
     }
+    
     public function show(Item $item)
     {
         if(!$item) {

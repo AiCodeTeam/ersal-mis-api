@@ -13,12 +13,12 @@ class Item extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'item_product');
+        return $this->belongsToMany(Product::class, 'item_product', 'item_id', 'product_id');
     }
 
     public function itemAddons()
     {
-        return $this->hasMany(ItemsAddon::class);
+        return $this->hasMany(ItemsAddon::class, 'item_id', 'id');
     }
 
 

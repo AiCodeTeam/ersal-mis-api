@@ -12,7 +12,7 @@ class ItemsAddon extends Model
     protected $table = 'items_addon';
     public function item()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class, 'item_id');
     }
     protected $fillable = [
         'item_id',

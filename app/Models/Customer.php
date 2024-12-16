@@ -13,6 +13,11 @@ class Customer extends Model
     {
         return $this->belongsTo(User::class); // A customer belongs to a user
     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'customer_id', 'id');
+    }
+    
     
     protected $fillable = [
         'name',

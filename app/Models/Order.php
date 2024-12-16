@@ -14,6 +14,11 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id'); // 'user_id' is the foreign key in the orders table
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+    
     protected $fillable = [
         'customer_id',
         'user_id',

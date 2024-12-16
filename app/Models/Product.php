@@ -21,7 +21,7 @@ class Product extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'item_product');
+        return $this->belongsToMany(Item::class, 'item_product', 'product_id', 'item_id');
     }
     
     protected $guarded = [];

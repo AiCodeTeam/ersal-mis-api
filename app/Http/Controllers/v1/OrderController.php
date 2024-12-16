@@ -15,7 +15,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return Order::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return Order::with('customer')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
     }
 
@@ -47,6 +47,9 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
+        // Load the 'customer' relationship
+        $order->load('customer');
+    
         // Return the order in a structured response
         return response()->json([
             'success' => true,
