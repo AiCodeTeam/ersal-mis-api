@@ -60,6 +60,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        // Load the 'images' and 'category' relationships
+        $product->load(['images', 'category']);
+    
         return response()->json([
             'success' => true,
             'message' => 'Product retrieved successfully',
