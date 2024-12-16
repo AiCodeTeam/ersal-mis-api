@@ -14,6 +14,6 @@ class Category extends Model
     protected $fillable = ['name']; // Mass assignable fields
     public function products()
     {
-        return $this->hasMany(Product::class); // A category has many products
+        return $this->hasMany(Product::class, 'product_category_id', 'id');
     }
 }
