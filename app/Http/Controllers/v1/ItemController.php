@@ -26,25 +26,51 @@ class ItemController extends Controller
         ], 200);
     }
 
-    public function show(Item $item)
-    {
-        $item->load(['itemAddons', 'products']);
-        if (!$item) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Item not found!',
-                'status' => 404,
-                'data' => $item,
-            ], 404);
-        }
+    public function show(Item $item, Request $request)
+{
+    // Paginate the itemAddons relationship
+    $itemAddons = $item->itemAddons()->paginate($request->input('per_page', 10)); // Default 10 per page
 
+    if (!$item) {
         return response()->json([
-            'success' => true,
-            'message' => 'Item retrieved successfully',
-            'status' => 200,
-            'data' => $item,
-        ], 200);
+            'success' => false,
+            'message' => 'Item not found!',
+            'status' => 404,
+            'data' => null,
+        ], 404);
     }
+
+    // Include paginated itemAddons in the response
+    return response()->json([
+        'success' => true,
+        'message' => 'Item retrieved successfully',
+        'status' => 200,
+        'data' => [
+            'item' => $item,
+            'item_addons' => $itemAddons, // Paginated result
+        ],
+    ], 200);
+}
+
+    // public function show(Item $item)
+    // {
+    //     $item->load(['itemAddons']);
+    //     if (!$item) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Item not found!',
+    //             'status' => 404,
+    //             'data' => $item,
+    //         ], 404);
+    //     }
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Item retrieved successfully',
+    //         'status' => 200,
+    //         'data' => $item,
+    //     ], 200);
+    // }
 
 
     /**

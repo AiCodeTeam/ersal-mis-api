@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\FileHandling;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -79,20 +80,52 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update([
-            'name' => $request->input('name'),
-            'price' => $request->input('price'),
-            'product_category_id' => $request->input('product_category_id', $product->product_category_id), // Keep old value if not provided
-            'quantity' => $request->input('quantity'),
-            'description' => $request->input('description'),
+            'name' => $request->input('name', $product->name),
+            'price' => $request->input('price', $product->price),
+            'product_category_id' => $request->input('product_category_id', $product->product_category_id),
+            'quantity' => $request->input('quantity', $product->quantity),
+            'description' => $request->input('description', $product->description),
         ]);
-
+    
+        // Handle image uploads
+        if ($request->hasFile('images')) {
+            // Delete old images
+            foreach ($product->images as $image) {
+                $relativePath = str_replace(config('app.url') . 'storage/', '', $image->image_url);
+                if (Storage::disk('public')->exists($relativePath)) {
+                    Storage::disk('public')->delete($relativePath);
+                }
+                $image->delete(); // Remove old image record from DB
+            }
+    
+            // Upload new images
+            $uploadedPaths = $this->uploadFiles($request->file('images'), 'product-images');
+    
+            // Save new images to the database
+            foreach ($uploadedPaths as $path) {
+                $product->images()->create([
+                    'image_url' => $path,
+                ]);
+            }
+        }
+    
+        // Update related items (sync with items array from the request)
+        if ($request->has('items')) {
+            $product->items()->sync($request->input('items'));
+        }
+    
+        // Reload the product with its relationships
+        $product->load('images', 'category', 'items');
+    
+        // Return success response
         return response()->json([
             'success' => true,
-            'message' => 'Product is updated successfully',
+            'message' => 'Product updated successfully with updated images and items',
             'status' => 200,
             'data' => $product,
         ], 200);
     }
+    
 
 
     /**

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Item extends Model
 {
     use HasFactory, SoftDeletes;
+    Protected $appends = ['item_left','total_qty','total_value_in_usd','total_value_in_afg'];
 
     public function products()
     {
@@ -26,6 +27,22 @@ class Item extends Model
         $totalProductCount = $this->products()->count();
         return $totalAddonQuantity - $totalProductCount;
     }
+
+    public function getTotalQtyAttribute()
+    {
+        return $this->itemAddons()->sum('quantity');
+    }
+
+    public function getTotalValueInUsdAttribute()
+    {
+        return $this->itemAddons()->sum('price_usd');
+    }
+
+    public function getTotalValueInAfgAttribute()
+    {
+        return $this->itemAddons()->sum('price_afg');
+    }
+
 
 
 
