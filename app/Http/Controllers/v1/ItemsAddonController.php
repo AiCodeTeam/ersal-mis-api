@@ -14,7 +14,7 @@ class ItemsAddonController extends Controller
      */
     public function index(Request $request)
     {
-        return ItemsAddon::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return ItemsAddon::with(['item'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     public function store(StoreItemsAddonRequest $request)
@@ -38,6 +38,7 @@ class ItemsAddonController extends Controller
     
     public function show(ItemsAddon $itemsAddon)
     {
+        $itemsAddon->load(['item']);
         return response()->json([
             'success' => true,
             'message' => 'Items addon retrieved successfully',

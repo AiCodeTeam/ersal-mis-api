@@ -22,14 +22,15 @@ class PostOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => 'nullable|exists:customers,id', // Assumes there is a 'customers' table
-            'user_id' => 'nullable|exists:users,id',       // Assumes there is a 'users' table
-            'product_id' => 'nullable|exists:products,id', // Assumes there is a 'products' table
+            'customer_id' => 'nullable|exists:customers,id',
+            'user_id' => 'nullable|exists:users,id',    
+            'product_id' => 'nullable|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'date' => 'required|date',
             'price_usa' => 'required|numeric|min:0',
             'price_afn' => 'required|numeric|min:0',
             'item_id' => 'required|integer',
+            'ref_no' => 'required|integer'
         ];
     }
 }

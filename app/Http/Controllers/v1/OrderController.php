@@ -24,7 +24,7 @@ class OrderController extends Controller
      */
     public function store(PostOrderRequest $request)
     {
-    
+
         $order = Order::create([
             'customer_id' => $request->input('customer_id'),
             'user_id' => $request->input('user_id'),
@@ -34,6 +34,7 @@ class OrderController extends Controller
             'price_usa' => $request->input('price_usa'),
             'price_afn' => $request->input('price_afn'),
             'item_id' => $request->input('item_id'),
+            'ref_no' => $request->input('ref_no'),
         ]);
 
         return response()->json([
@@ -70,6 +71,7 @@ class OrderController extends Controller
             'price_usa' => $request->input('price_usa'),
             'price_afn' => $request->input('price_afn'),
             'item_id' => $request->input('item_id'),
+            'ref_no' => $request->input('ref_no'),
         ]);
 
         // Return a structured response

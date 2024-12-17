@@ -24,6 +24,9 @@ class StoreItemRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'date' => 'required|date',
+            'item_image' => 'required|file|mimes:jpg,jpeg,png,webp|max:2048', // Required file, must be jpg/jpeg/png, max 2MB
+            'bill_image' => 'required|file|mimes:jpg,jpeg,png,webp|max:2048', // Required file, must be jpg/jpeg/png, max 2MB
         ];
     }
 }

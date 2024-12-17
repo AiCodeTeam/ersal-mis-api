@@ -27,6 +27,7 @@ class Order extends Model
         'date',
         'price_usa',
         'price_afn',
-        'item_id'
+        'item_id',
+        'ref_no'
     ];
 }

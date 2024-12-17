@@ -44,6 +44,9 @@ class ProductController extends Controller
                 ]);
             }
         }
+        if($request->has('items')) {
+            $product->items()->sync($request->input('items'));
+        }
     
         // Return success response
         return response()->json([

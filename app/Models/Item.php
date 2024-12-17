@@ -20,10 +20,20 @@ class Item extends Model
     {
         return $this->hasMany(ItemsAddon::class, 'item_id', 'id');
     }
+    public function getItemLeftAttribute()
+    {
+        $totalAddonQuantity = $this->itemAddons()->sum('quantity');
+        $totalProductCount = $this->products()->count();
+        return $totalAddonQuantity - $totalProductCount;
+    }
+
 
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'date',
+        'item_image',
+        'bill_image'
     ];
 }

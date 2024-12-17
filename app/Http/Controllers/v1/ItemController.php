@@ -6,25 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Models\Item;
+use App\Traits\FileHandling;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
+    use FileHandling;
     public function index(Request $request)
     {
+
         $items = Item::with(['itemAddons', 'products'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
-    
-        // Map the custom attribute into the paginated items
-        $items->getCollection()->transform(function ($item) {
-            $totalAddonQuantity = $item->itemAddons()->sum('quantity');
-            $totalProductCount = $item->products()->count();
-            // Add the custom calculated attribute
-            $item->item_left = $totalAddonQuantity - $totalProductCount;
-    
-            return $item;
-        });
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Items retrieved successfully',
@@ -32,10 +25,11 @@ class ItemController extends Controller
             'data' => $items,
         ], 200);
     }
-    
+
     public function show(Item $item)
     {
-        if(!$item) {
+        $item->load(['itemAddons', 'products']);
+        if (!$item) {
             return response()->json([
                 'success' => false,
                 'message' => 'Item not found!',
@@ -43,6 +37,7 @@ class ItemController extends Controller
                 'data' => $item,
             ], 404);
         }
+
         return response()->json([
             'success' => true,
             'message' => 'Item retrieved successfully',
@@ -57,10 +52,37 @@ class ItemController extends Controller
      */
     public function store(StoreItemRequest $request)
     {
+        $itemImagePath = null;
+        $billImagePath = null;
+
+        // Upload 'item_image' if it exists
+        if ($request->hasFile('item_image')) {
+            $itemImagePath = $this->uploadFile(
+                $request->file('item_image'),
+                null,
+                'items/images'
+            );
+        }
+
+        // Upload 'bill_image' if it exists
+        if ($request->hasFile('bill_image')) {
+            $billImagePath = $this->uploadFile(
+                $request->file('bill_image'),
+                null,
+                'bills/images'
+            );
+        }
+        
         $item = Item::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'date' => $request->input('date'),
+            'item_image' => $itemImagePath,
+            'bill_image' => $billImagePath,
         ]);
+        if ($request->has('products')) {
+            $item->products()->sync($request->input('products'));
+        }
 
         return response()->json([
             'success' => true,

@@ -30,6 +30,7 @@ class UpdateOrderRequest extends FormRequest
             'price_usa' => 'nullable|numeric|min:0',
             'price_afn' => 'nullable|numeric|min:0',
             'item_id' => 'nullable|integer',
+            'ref_no' => 'nullable|string'
         ];
     }
 }
