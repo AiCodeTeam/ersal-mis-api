@@ -15,7 +15,7 @@ class ItemSeeder extends Seeder
     public function run(): void
     {
         // Base URL for storage
-        $baseUrl = config('app.url') . '/storage/';
+        $baseUrl = config('app.url') . 'storage/';
 
         // Number of records to create
         $totalRecords = 50;
