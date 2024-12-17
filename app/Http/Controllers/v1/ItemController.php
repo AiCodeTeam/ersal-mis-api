@@ -72,7 +72,7 @@ class ItemController extends Controller
                 'bills/images'
             );
         }
-        
+
         $item = Item::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -80,9 +80,6 @@ class ItemController extends Controller
             'item_image' => $itemImagePath,
             'bill_image' => $billImagePath,
         ]);
-        if ($request->has('products')) {
-            $item->products()->sync($request->input('products'));
-        }
 
         return response()->json([
             'success' => true,
