@@ -27,30 +27,34 @@ class ItemController extends Controller
     }
 
     public function show(Item $item, Request $request)
-{
-    // Paginate the itemAddons relationship
-    $itemAddons = $item->itemAddons()->paginate($request->input('per_page', 10)); // Default 10 per page
-
-    if (!$item) {
+    {
+        // Check if the item exists
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item not found!',
+                'status' => 404,
+                'data' => null,
+            ], 404);
+        }
+    
+        // Eager load the relationships: products and paginated itemAddons
+        $item->load('products'); // Eager load products
+        $itemAddons = $item->itemAddons()->paginate($request->input('per_page', 10)); // Paginate itemAddons
+    
+        // Include the relationships in the response
         return response()->json([
-            'success' => false,
-            'message' => 'Item not found!',
-            'status' => 404,
-            'data' => null,
-        ], 404);
+            'success' => true,
+            'message' => 'Item retrieved successfully',
+            'status' => 200,
+            'data' => [
+                'item' => $item,
+                'products' => $item->products, // Loaded products relationship
+                'item_addons' => $itemAddons, // Paginated result for itemAddons
+            ],
+        ], 200);
     }
-
-    // Include paginated itemAddons in the response
-    return response()->json([
-        'success' => true,
-        'message' => 'Item retrieved successfully',
-        'status' => 200,
-        'data' => [
-            'item' => $item,
-            'item_addons' => $itemAddons, // Paginated result
-        ],
-    ], 200);
-}
+    
 
     // public function show(Item $item)
     // {
