@@ -128,9 +128,33 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request, Item $item)
     {
+        $itemImagePath = $item->item_image;
+        $billImagePath = $item->bill_image;
+
+        // Update 'item_image' if it exists
+        if ($request->hasFile('item_image')) {
+            $itemImagePath = $this->uploadFile(
+                $request->file('item_image'),
+                $item->item_image,
+                'items/images'
+            );
+        }
+
+        // Update 'bill_image' if it exists
+        if ($request->hasFile('bill_image')) {
+            $billImagePath = $this->uploadFile(
+                $request->file('bill_image'),
+                $item->bill_image,
+                'bills/images'
+            );
+        }
+
         $item->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'date' => $request->input('date'),
+            'item_image' => $itemImagePath,
+            'bill_image' => $billImagePath,
         ]);
 
         return response()->json([
@@ -146,11 +170,17 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        // Delete related images
+        if ($item->item_image) {
+            $this->deleteFile($item->item_image);
+        }
+        if ($item->bill_image) {
+            $this->deleteFile($item->bill_image);
+        }
         $item->delete();
-
         return response()->json([
             'success' => true,
-            'message' => 'Item deleted successfully',
+            'message' => 'Item images deleted successfully',
             'status' => 200,
         ], 200);
     }

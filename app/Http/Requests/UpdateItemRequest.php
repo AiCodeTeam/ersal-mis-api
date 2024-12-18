@@ -22,8 +22,11 @@ class UpdateItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
+            'date' => 'sometimes|required|date',
+            'item_image' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'bill_image' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
