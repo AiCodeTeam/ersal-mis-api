@@ -16,7 +16,7 @@ class ProductController extends Controller
   use FileHandling;
     public function index(Request $request)
     {
-        return Product::with(['images','category'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return Product::with(['images','category','items'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
     }
 
@@ -65,7 +65,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         // Load the 'images' and 'category' relationships
-        $product->load(['images', 'category']);
+        $product->load(['images', 'category','items']);
     
         return response()->json([
             'success' => true,
