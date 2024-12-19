@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('item_image');
-            $table->string('bill_image');
             $table->timestamps();
             $table->softDeletes();
         });

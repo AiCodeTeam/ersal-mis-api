@@ -26,7 +26,6 @@ class UpdateItemRequest extends FormRequest
             'description' => 'sometimes|required|string',
             'date' => 'sometimes|required|date',
             'item_image' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'bill_image' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

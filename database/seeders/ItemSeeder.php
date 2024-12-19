@@ -33,7 +33,6 @@ class ItemSeeder extends Seeder
                     'description' => 'This is the description for item ' . $i,
                     'date' => now()->subDays(rand(1, 30))->format('Y-m-d'), // Randomize date within last 30 days
                     'item_image' => $baseUrl . $imagePath,
-                    'bill_image' => $baseUrl . $imagePath,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

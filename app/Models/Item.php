@@ -46,11 +46,11 @@ class Item extends Model
 
 
 
-    protected $fillable = [
-        'name',
-        'description',
-        'date',
-        'item_image',
-        'bill_image'
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'description',
+    //     'date',
+    //     'item_image',
+    // ];
+    protected $guarded = [];
 }

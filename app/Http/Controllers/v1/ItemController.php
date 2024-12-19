@@ -83,7 +83,6 @@ class ItemController extends Controller
     public function store(StoreItemRequest $request)
     {
         $itemImagePath = null;
-        $billImagePath = null;
 
         // Upload 'item_image' if it exists
         if ($request->hasFile('item_image')) {
@@ -94,21 +93,11 @@ class ItemController extends Controller
             );
         }
 
-        // Upload 'bill_image' if it exists
-        if ($request->hasFile('bill_image')) {
-            $billImagePath = $this->uploadFile(
-                $request->file('bill_image'),
-                null,
-                'bills/images'
-            );
-        }
-
         $item = Item::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date' => $request->input('date'),
             'item_image' => $itemImagePath,
-            'bill_image' => $billImagePath,
         ]);
 
         return response()->json([
@@ -129,7 +118,7 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, Item $item)
     {
         $itemImagePath = $item->item_image;
-        $billImagePath = $item->bill_image;
+        // $billImagePath = $item->bill_image;
 
         // Update 'item_image' if it exists
         if ($request->hasFile('item_image')) {
@@ -140,21 +129,13 @@ class ItemController extends Controller
             );
         }
 
-        // Update 'bill_image' if it exists
-        if ($request->hasFile('bill_image')) {
-            $billImagePath = $this->uploadFile(
-                $request->file('bill_image'),
-                $item->bill_image,
-                'bills/images'
-            );
-        }
+    
 
         $item->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date' => $request->input('date'),
             'item_image' => $itemImagePath,
-            'bill_image' => $billImagePath,
         ]);
 
         return response()->json([
