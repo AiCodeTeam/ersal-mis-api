@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\v1\ItemsAddonController;
 use App\Http\Controllers\v1\CustomerController;
 use App\Http\Controllers\v1\ExpenseCategoryController;
@@ -102,4 +103,8 @@ Route::prefix('v1')->group(function () {
         // 'update' => 'permission:update',
         // 'destroy' => 'permission:delete',
     ]);
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
