@@ -23,6 +23,10 @@ class Product extends Model
     {
         return $this->belongsToMany(Item::class, 'item_product', 'product_id', 'item_id');
     }
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
     
     protected $guarded = [];
 

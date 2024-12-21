@@ -15,7 +15,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return Order::with('customer')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return Order::with(['customer','product'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
     }
 
