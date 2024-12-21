@@ -49,7 +49,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         // Load the 'customer' relationship
-        $order->load('customer');
+        $order->load(['customer', 'product']);
     
         // Return the order in a structured response
         return response()->json([
