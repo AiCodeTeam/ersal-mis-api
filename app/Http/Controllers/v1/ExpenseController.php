@@ -12,7 +12,7 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        return Expense::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return Expense::with('expenseCategory')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
     }
 
@@ -37,13 +37,8 @@ class ExpenseController extends Controller
 
     public function show(Expense $expense = null)
     {
-        if (!$expense) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Expense not found!',
-                'status' => 404,
-            ], 404);
-        }
+    
+        $expense->load('expenseCategory');
 
         return response()->json([
             'success' => true,

@@ -12,7 +12,7 @@ class ExpenseCategoryController extends Controller
 {
     public function index(Request $request)
     {
-        return ExpenseCategory::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return ExpenseCategory::with('expenses')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
     public function store(StoreExpenseCategoryRequest $request)
