@@ -17,7 +17,7 @@ class ExpenseController extends Controller
 
     }
     public function expenseCategoryDropdown() {
-        $dropdown = ExpenseCategory::select('name')->get();
+        $dropdown = ExpenseCategory::select('id','name')->get();
         return response()->json([
             'success' => true,
             'message' => 'Expense Category fetched successfully',
