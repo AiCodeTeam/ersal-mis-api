@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -14,6 +15,15 @@ class ExpenseController extends Controller
     {
         return Expense::with('expenseCategory')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
+    }
+    public function expenseCategoryDropdown() {
+        $dropdown = ExpenseCategory::select('name')->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Expense Category fetched successfully',
+            'status' => 200,
+            'data' => $dropdown,
+        ], 200);
     }
 
     public function store(StoreExpenseRequest $request)

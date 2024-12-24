@@ -107,4 +107,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    //expense category dropdonw
+    Route::get('/expense-category-dropdown', [ExpenseController::class, 'expenseCategoryDropdown']);
+
 });
