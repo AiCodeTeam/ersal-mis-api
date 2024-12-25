@@ -7,7 +7,9 @@ use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
+// use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -34,7 +36,7 @@ class ExpenseController extends Controller
             'price' => $request->input('price'),
             'date' => $request->input('date'),
             'expense_categories_id' => $request->input('expense_categories_id'),
-            'user_id' => $request->input('user_id'),
+            'user_id' => Auth::id(),
             'purchased_by' => $request->input('purchased_by'),
         ]);
 

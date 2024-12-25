@@ -17,9 +17,9 @@ class UserController extends Controller
     public function rolesAndPermission()
     {
 
-        return User::find(1);
+        return User::all();
         $users = User::find(1)->with(['roles', 'permissions'])->get();
-        return $users;
+        // return $users;
     
         $formattedUsers = $users->map(function ($user) {
             // Map each permission with model type and ID

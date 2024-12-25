@@ -15,8 +15,6 @@ class ItemController extends Controller
     use FileHandling;
     public function index(Request $request)
     {
-
-
         if(!$request->limit) return Item::all();
 
         $items = Item::with(['itemAddons', 'products'])->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
