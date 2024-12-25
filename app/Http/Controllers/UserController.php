@@ -9,8 +9,45 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+   
     public function index(Request $request){
         return User::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+    }
+
+    public function rolesAndPermission()
+    {
+
+        return User::find(1);
+        $users = User::find(1)->with(['roles', 'permissions'])->get();
+        return $users;
+    
+        $formattedUsers = $users->map(function ($user) {
+            // Map each permission with model type and ID
+            $permissionsWithModels = $user->getAllPermissions()->map(function ($permission) {
+                return [
+                    'permission' => $permission->name,
+                    'model_type' => $permission->model_type ?? null, // Assuming permission has model_type column
+                    'model_id' => $permission->model_id ?? null, // Assuming permission has model_id column
+                ];
+            });
+    
+            // Map each role with its name (keeping roles simple here)
+            $roles = $user->roles->pluck('name');
+    
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $roles, // List of roles
+                'permissions' => $permissionsWithModels, // Permissions with models
+            ];
+        });
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Users with roles and permissions retrieved successfully.',
+            'data' => $formattedUsers,
+        ], 200);
     }
     
 

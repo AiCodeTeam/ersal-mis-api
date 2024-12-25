@@ -22,6 +22,8 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
+
+
     Route::apiResource('customers', CustomerController::class)->middleware([
         // 'index' => 'permission:view',
         // 'show' => 'permission:view',
@@ -103,11 +105,15 @@ Route::prefix('v1')->group(function () {
         // 'update' => 'permission:update',
         // 'destroy' => 'permission:delete',
     ]);
+    Route::get('/users/roles-permissions', [UserController::class, 'rolesAndPermission']);
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    
+
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     //expense category dropdonw
     Route::get('/expense-category-dropdown', [ExpenseController::class, 'expenseCategoryDropdown']);
+    //role and permission route
 
 });

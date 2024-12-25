@@ -27,7 +27,7 @@ class UpdateItemsAddonRequest extends FormRequest
             'price_usd' => 'sometimes|numeric|min:0',
             'price_afg' => 'sometimes|numeric|min:0',
             'quantity' => 'sometimes|integer',
-            'bill_image' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            // 'bill_image' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'date' => 'sometimes|date',
         ];
     }

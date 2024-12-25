@@ -13,6 +13,7 @@ class ProductCategoryController extends Controller
 
     public function index(Request $request)
     {
+        if(!$request->limit) return Category::all();
         return Category::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
 
     }

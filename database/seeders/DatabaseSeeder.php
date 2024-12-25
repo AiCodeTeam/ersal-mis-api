@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             ItemsAddonSeeder::class,
             ExpenseSeeder::class,
             OrderSeeder::class,
-            ProductImageSeeder::class
+            ProductImageSeeder::class,
+            RolePermissionSeeder::class,
         ]);
     }
 }
