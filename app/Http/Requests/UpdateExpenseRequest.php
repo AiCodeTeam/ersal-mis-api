@@ -32,7 +32,7 @@ class UpdateExpenseRequest extends FormRequest
                     $query->whereNull('deleted_at');
                 })
             ],
-            'user_id' => 'nullable|exists:users,id',
+            // 'user_id' => 'nullable|exists:users,id',
             'purchased_by' => 'nullable|string|max:255',
         ];
     }

@@ -69,7 +69,7 @@ class ExpenseController extends Controller
             'price' => $request->input('price'),
             'date' => $request->input('date'),
             'expense_categories_id' => $request->input('expense_categories_id'),
-            'user_id' => $request->input('user_id'),
+            'user_id' => Auth::id(),
             'purchased_by' => $request->input('purchased_by'),
         ]);
 
