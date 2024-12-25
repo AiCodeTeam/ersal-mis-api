@@ -26,7 +26,7 @@ class StoreExpenseRequest extends FormRequest
             'price' => 'required|numeric|min:0',  // Validates the price as a numeric value
             'date' => 'required|date',
             'expense_categories_id' => 'required|exists:categories,id',
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id',
             'purchased_by' => 'required|string|max:255',
         ];
     }
