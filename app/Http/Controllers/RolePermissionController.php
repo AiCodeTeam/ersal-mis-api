@@ -162,7 +162,7 @@ class RolePermissionController extends Controller
 
     public function listRoles()
     {
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
 
         return response()->json([
             'success' => true,
