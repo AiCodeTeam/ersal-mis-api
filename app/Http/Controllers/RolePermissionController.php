@@ -160,16 +160,18 @@ class RolePermissionController extends Controller
         ], 200);
     }
 
-    public function listRoles()
+    public function listRoles(Request $request)
     {
-        $roles = Role::with('permissions')->get();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Roles retrieved successfully.',
-            'data' => $roles,
-        ], 200);
+        if(!$request->limit) return Role::all();
+        return Role::with('permissions')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
+
+    public function showRole($id)
+    {
+        return Role::with('permissions')->find($id);
+    }
+    
 
     /**
      * List all permissions.

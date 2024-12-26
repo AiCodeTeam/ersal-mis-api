@@ -125,5 +125,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/revome-all-roles-from-user', [RolePermissionController::class, 'revokeAllRolesFromUser']);
     Route::post('/detach-all-permissions-from-role', [RolePermissionController::class, 'revokeAllPermissionsFromRole']);
     Route::get('/list-roles', [RolePermissionController::class, 'listRoles']);
+    Route::get('/list-roles/{id}', [RolePermissionController::class, 'showRole']);
+
     Route::get('/list-permissions', [RolePermissionController::class, 'listPermissions']);
 });
