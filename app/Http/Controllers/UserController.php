@@ -11,7 +11,7 @@ class UserController extends Controller
 {
    
     public function index(Request $request){
-        return User::paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
+        return User::paginate($request->limit ?? 20, ['*'], 'page', $request->page ?? 1);
     }
 
     public function rolesAndPermission()

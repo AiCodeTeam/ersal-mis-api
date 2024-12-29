@@ -14,7 +14,7 @@ class RolePermissionSeeder extends Seeder
         // Define roles and their corresponding models and permission types
         $rolesPermissions = [
             'admin' => [
-                'models' => ['User', 'Category', 'Customer', 'Expense', 'ExpenseCategory', 'Item', 'ItemsAddon', 'Order', 'Product', 'ProductImage', 'ProductItem'],
+                'models' => ['User', 'Category', 'Customer', 'Expense', 'ExpenseCategory', 'Item', 'ItemsAddon', 'Order', 'Product', 'ProductImage', 'ProductItem','Role','Permission'],
                 'permissions' => ['view', 'create', 'update', 'delete'],
             ],
             'editor' => [
