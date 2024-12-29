@@ -14,7 +14,7 @@ class RolePermissionController extends Controller
      */
     public function createRole(Request $request)
     {
-        
+
         $validatedData = $request->validate([
             'name' => 'required|string|unique:roles,name',
         ]);
@@ -26,6 +26,52 @@ class RolePermissionController extends Controller
             'message' => 'Role created successfully.',
             'data' => $role,
         ], 201);
+    }
+    public function updateRole(Request $request, $id)
+    {
+        // Validate the input
+        $validatedData = $request->validate([
+            'name' => 'required|string|unique:roles,name,' . $id,
+        ]);
+
+        // Find the role by ID
+        $role = Role::find($id);
+
+        if (!$role) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Role not found.',
+            ], 404);
+        }
+
+        // Update the role name
+        $role->update(['name' => $validatedData['name']]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role updated successfully.',
+            'data' => $role,
+        ], 200);
+    }
+    public function deleteRole($id)
+    {
+        // Find the role by ID
+        $role = Role::find($id);
+
+        if (!$role) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Role not found.',
+            ], 404);
+        }
+
+        // Delete the role
+        $role->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role deleted successfully.',
+        ], 200);
     }
 
     /**
@@ -163,7 +209,7 @@ class RolePermissionController extends Controller
     public function listRoles(Request $request)
     {
 
-        if(!$request->limit) return Role::all();
+        if (!$request->limit) return Role::all();
         return Role::with('permissions')->paginate($request->limit ?? 10, ['*'], 'page', $request->page ?? 1);
     }
 
@@ -171,7 +217,7 @@ class RolePermissionController extends Controller
     {
         return Role::with('permissions')->find($id);
     }
-    
+
 
     /**
      * List all permissions.

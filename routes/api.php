@@ -23,99 +23,73 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
+    // Customers routes
+    Route::apiResource('customers', CustomerController::class)
+        ->middleware('permission:view Customer|create Customer|update Customer|delete Customer');
 
+    // Orders routes
+    Route::apiResource('orders', OrderController::class)
+        ->middleware('permission:view Order|create Order|update Order|delete Order');
 
-    Route::apiResource('customers', CustomerController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Products routes
+    Route::apiResource('products', ProductController::class)
+        ->middleware('permission:view Product|create Product|update Product|delete Product');
 
-    // Orders routes with permissions
-    Route::apiResource('orders', OrderController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Categories routes
+    Route::apiResource('category', ProductCategoryController::class)
+        ->middleware('permission:view Category|create Category|update Category|delete Category');
 
-    // Products routes with permissions
-    Route::apiResource('products', ProductController::class);
-    // Categories routes with permissions
-    Route::apiResource('category', ProductCategoryController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Product Images routes
+    Route::apiResource('products-images', ProductImageController::class)
+        ->middleware('permission:view ProductImage|create ProductImage|update ProductImage|delete ProductImage');
 
-    // Product Images routes with permissions
-    Route::apiResource('products-images', ProductImageController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Items routes
+    Route::apiResource('items', ItemController::class)
+        ->middleware('permission:view Item|create Item|update Item|delete Item');
 
-    // Items routes with permissions
-    Route::apiResource('items', ItemController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Product Items routes
+    Route::apiResource('product-items', ProductItemController::class)
+        ->middleware('permission:view ProductItem|create ProductItem|update ProductItem|delete ProductItem');
 
-    // Product Items routes with permissions
-    Route::apiResource('product-items', ProductItemController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Items Addons routes
+    Route::apiResource('items-addons', ItemsAddonController::class)
+        ->middleware('permission:view ItemsAddon|create ItemsAddon|update ItemsAddon|delete ItemsAddon');
 
-    // Items Addons routes with permissions
-    Route::apiResource('items-addons', ItemsAddonController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Expenses routes
+    Route::apiResource('expenses', ExpenseController::class)
+        ->middleware('permission:view Expense|create Expense|update Expense|delete Expense');
 
-    // Expenses routes with permissions
-    Route::apiResource('expenses', ExpenseController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
+    // Expense Categories routes
+    Route::apiResource('expense-categories', ExpenseCategoryController::class)
+        ->middleware('permission:view ExpenseCategory|create ExpenseCategory|update ExpenseCategory|delete ExpenseCategory');
 
-    // Expense Categories routes with permissions
-    Route::apiResource('expense-categories', ExpenseCategoryController::class)->middleware([
-        // 'index' => 'permission:view',
-        // 'show' => 'permission:view',
-        // 'store' => 'permission:create',
-        // 'update' => 'permission:update',
-        // 'destroy' => 'permission:delete',
-    ]);
-    Route::get('/users/roles-permissions', [UserController::class, 'rolesAndPermission']);
-    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    // User-specific routes with admin-only access
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/users/roles-permissions', [UserController::class, 'rolesAndPermission']);
+        Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
 
+    // Expense category dropdown (view permission required)
+    Route::get('/expense-category-dropdown', [ExpenseController::class, 'expenseCategoryDropdown'])
+        ->middleware('permission:view ExpenseCategory');
 
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    //expense category dropdonw
-    Route::get('/expense-category-dropdown', [ExpenseController::class, 'expenseCategoryDropdown']);
-    //role and permission route
+    // Role and permission management (admin-only)
+    // Route::middleware('role:admin')->group(function () {
+    //     Route::post('/create-role', [RolePermissionController::class, 'createRole']);
+    //     Route::post('/create-permission', [RolePermissionController::class, 'createPermission']);
+    //     Route::post('/assign-permissions-to-role', [RolePermissionController::class, 'assignPermissionsToRole']);
+    //     Route::post('/assign-role-to-user', [RolePermissionController::class, 'assignRoleToUser']);
+    //     Route::post('/revoke-role-from-user', [RolePermissionController::class, 'revokeRoleFromUser']);
+    //     Route::post('/revoke-permissions-from-role', [RolePermissionController::class, 'revokePermissionsFromRole']);
+    //     Route::post('/revome-all-roles-from-user', [RolePermissionController::class, 'revokeAllRolesFromUser']);
+    //     Route::post('/detach-all-permissions-from-role', [RolePermissionController::class, 'revokeAllPermissionsFromRole']);
+    //     Route::get('/list-roles', [RolePermissionController::class, 'listRoles']);
+    //     Route::get('/list-roles/{id}', [RolePermissionController::class, 'showRole']);
+    //     Route::get('/list-permissions', [RolePermissionController::class, 'listPermissions']);
+    // });
     Route::post('/create-role', [RolePermissionController::class, 'createRole']);
     Route::post('/create-permission', [RolePermissionController::class, 'createPermission']);
     Route::post('/assign-permissions-to-role', [RolePermissionController::class, 'assignPermissionsToRole']);
@@ -126,6 +100,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/detach-all-permissions-from-role', [RolePermissionController::class, 'revokeAllPermissionsFromRole']);
     Route::get('/list-roles', [RolePermissionController::class, 'listRoles']);
     Route::get('/list-roles/{id}', [RolePermissionController::class, 'showRole']);
-
     Route::get('/list-permissions', [RolePermissionController::class, 'listPermissions']);
+    Route::put('/roles/{id}', [RolePermissionController::class, 'updateRole']);
+    Route::delete('/roles/{id}', [RolePermissionController::class, 'deleteRole']);
 });
