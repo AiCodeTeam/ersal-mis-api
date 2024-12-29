@@ -13,14 +13,24 @@ class RolePermissionController extends Controller
      * Create a new role.
      */
     public function createRole(Request $request)
-    {
-
+    {  
+        // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string|unique:roles,name',
+            'permissions' => 'sometimes|array',
+            'permissions.*' => 'integer|exists:permissions,id',
         ]);
-
+    
+        // Create the role
         $role = Role::create(['name' => $validatedData['name']]);
-
+    
+        // If permissions are provided, assign them to the role
+        if (!empty($validatedData['permissions'])) {
+            // Fetch permissions by their IDs
+            $permissions = Permission::whereIn('id', $validatedData['permissions'])->get();
+            $role->syncPermissions($permissions);
+        }
+    
         return response()->json([
             'success' => true,
             'message' => 'Role created successfully.',
@@ -29,24 +39,34 @@ class RolePermissionController extends Controller
     }
     public function updateRole(Request $request, $id)
     {
-        // Validate the input
+        
+        // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string|unique:roles,name,' . $id,
+            'permissions' => 'sometimes|array',
+            'permissions.*' => 'integer|exists:permissions,id',
         ]);
-
+    
         // Find the role by ID
         $role = Role::find($id);
-
+    
         if (!$role) {
             return response()->json([
                 'success' => false,
                 'message' => 'Role not found.',
             ], 404);
         }
-
+    
         // Update the role name
         $role->update(['name' => $validatedData['name']]);
-
+    
+        // If permissions are provided, update the role's permissions
+        if (!empty($validatedData['permissions'])) {
+            // Fetch permissions by their IDs
+            $permissions = Permission::whereIn('id', $validatedData['permissions'])->get();
+            $role->syncPermissions($permissions);
+        }
+    
         return response()->json([
             'success' => true,
             'message' => 'Role updated successfully.',
@@ -57,58 +77,20 @@ class RolePermissionController extends Controller
     {
         // Find the role by ID
         $role = Role::find($id);
-
+    
         if (!$role) {
             return response()->json([
                 'success' => false,
                 'message' => 'Role not found.',
             ], 404);
         }
-
+    
         // Delete the role
         $role->delete();
-
+    
         return response()->json([
             'success' => true,
             'message' => 'Role deleted successfully.',
-        ], 200);
-    }
-
-    /**
-     * Create a new permission.
-     */
-    // public function createPermission(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|unique:permissions,name',
-    //     ]);
-
-    //     $permission = Permission::create(['name' => $validatedData['name']]);
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Permission created successfully.',
-    //         'data' => $permission,
-    //     ], 201);
-    // }
-
-    /**
-     * Assign permissions to a role.
-     */
-    public function assignPermissionsToRole(Request $request)
-    {
-        $validatedData = $request->validate([
-            'role' => 'required|string|exists:roles,name',
-            'permissions' => 'required|array',
-            'permissions.*' => 'string|exists:permissions,name',
-        ]);
-
-        $role = Role::findByName($validatedData['role']);
-        $role->syncPermissions($validatedData['permissions']);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Permissions assigned to role successfully.',
         ], 200);
     }
 
