@@ -182,13 +182,22 @@ Route::prefix('v1')->group(function () {
             'destroy' => 'permission:delete Role',
             'show' => 'permission:view Role',
         ]);
+
+        Route::put('/update-role/{role}', [RolePermissionController::class, 'updateRole'])
+        ->middleware([
+            // 'index' => 'permission:view Role',
+            // 'store' => 'permission:create Role',
+            // 'update' => 'permission:update Role',
+            // 'destroy' => 'permission:delete Role',
+            // 'show' => 'permission:view Role',
+        ]);
         Route::post('/assign-permissions-to-role', [RolePermissionController::class, 'assignPermissionsToRole'])
         ->middleware([
-            'index' => 'permission:view Role',
-            'store' => 'permission:create Role',
-            'update' => 'permission:update Role',
-            'destroy' => 'permission:delete Role',
-            'show' => 'permission:view Role',
+            // 'index' => 'permission:view Role',
+            // 'store' => 'permission:create Role',
+            // 'update' => 'permission:update Role',
+            // 'destroy' => 'permission:delete Role',
+            // 'show' => 'permission:view Role',
         ]);
         Route::post('/assign-role-to-user', [RolePermissionController::class, 'assignRoleToUser'])
         ->middleware([
