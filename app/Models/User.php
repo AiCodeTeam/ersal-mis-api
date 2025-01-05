@@ -66,4 +66,16 @@ class User extends Authenticatable
     {
         return parent::newQuery($excludeDeleted)->with(['roles.permissions', 'permissions']);
     }
+
+    public function getAllPermissionsAttribute()
+    {
+        $rolePermissions = $this->roles->flatMap(function ($role) {
+            return $role->permissions->pluck('name');
+        });
+
+        $directPermissions = $this->permissions->pluck('name');
+        return $rolePermissions->merge($directPermissions)->unique()->values()->toArray();
+    }
+
+
 }
