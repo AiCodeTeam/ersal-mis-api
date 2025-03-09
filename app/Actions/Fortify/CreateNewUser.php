@@ -36,8 +36,8 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
-        $user->syncPermissions($input['permissions']);
-        $user->syncRoles($input['roles']);
+        // $user->syncPermissions($input['permissions']);
+        // $user->syncRoles($input['roles']);
         return $user;
 
 

@@ -25,7 +25,7 @@ class OrderSeeder extends Seeder
                 'date' => $faker->date(),
                 'price_usa' => $faker->randomFloat(2, 10, 500),
                 'price_afn' => $faker->randomFloat(2, 100, 50000),
-                'item_id' => $faker->numberBetween(1, 50), // Adjust based on existing item IDs
+                'item_id' => $faker->numberBetween(1, 40), // Adjust based on existing item IDs
                 'ref_no' => $faker->numberBetween(1, 100)
             ]);
         }
