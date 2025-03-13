@@ -28,7 +28,7 @@ class ItemsAddonSeeder extends Seeder
             }
 
             ItemsAddon::create([
-                'item_id' => rand(1, 40),
+                'item_id' => rand(1, 10),
                 'description' => 'Addon Description ' . $i,
                 'price_usd' => rand(10, 500),
                 'price_afg' => rand(800, 40000),
