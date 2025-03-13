@@ -21,7 +21,7 @@ Route::get('/user', function (Request $request) {
     $user = $request->user();
     $user->all_permissions = $user->getAllPermissionsAttribute();
     return $user;
-});
+})->middleware('auth');
 
 Route::prefix('v1')->group(function () {
 
