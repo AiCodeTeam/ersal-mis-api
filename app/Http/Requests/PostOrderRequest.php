@@ -29,7 +29,7 @@ class PostOrderRequest extends FormRequest
             'date' => 'required|date',
             'price_usa' => 'required|numeric|min:0',
             'price_afn' => 'required|numeric|min:0',
-            'item_id' => 'required|integer',
+            // 'item_id' => 'required|integer',
             'ref_no' => 'required|integer'
         ];
     }

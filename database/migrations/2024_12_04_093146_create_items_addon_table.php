@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('price_usd');
             $table->integer('price_afg');
             $table->integer('quantity');
-            $table->string('bill_image');
+            $table->string('bill_image')->nullable();
             $table->date('date');
             $table->timestamps();
             $table->softDeletes();
