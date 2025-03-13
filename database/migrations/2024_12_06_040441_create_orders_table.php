@@ -22,14 +22,12 @@ return new class extends Migration
             $table->date('date');
             $table->double('price_usa');
             $table->double('price_afn');
-            $table->unsignedBigInteger('item_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+            $table->string("ref_no")->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->nullOnDelete()->nullOnUpdate();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->nullOnUpdate();
             $table->foreign('product_id')->references('id')->on('products')->nullOnDelete()->nullOnUpdate();
-            $table->foreign('item_id')->references('id')->on('items')->nullOnDelete()->nullOnUpdate();
         });
     }
 
